@@ -15,9 +15,11 @@ public function up(){
         $table->string('prenom',50);
         $table->string('email' , 100)->unique();
         $table->string('password' , 200);
-        $table->string('biographie')->nullable();
+        $table->text('biographie')->nullable();
         $table->string('image')->nullable();
         $table->enum('role' , ['RECRUTEUR' , 'RECHERCHEUR']);
+        $table->timestamp('date_creation')->useCurrent();
+        $table->timestamp('date_modification')->useCurrent();
     });
 }
 
