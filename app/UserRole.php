@@ -2,7 +2,8 @@
 
 namespace App;
 
-enum UserRole
+enum UserRole:string
 {
-    //
+    case RECRUTEUR = 'RECRUTEUR';
+    case RECHERCHEUR = 'RECHERCHEUR';
 }
