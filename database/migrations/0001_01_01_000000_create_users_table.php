@@ -20,6 +20,7 @@ public function up(){
         $table->enum('role' , ['RECRUTEUR' , 'RECHERCHEUR']);
         $table->timestamp('date_creation')->useCurrent();
         $table->timestamp('date_modification')->useCurrent();
+        $table->timestamps();
     });
 }
 
