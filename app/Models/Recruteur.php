@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Recruteur extends Model
+class Recruteur extends User
 {
-    //
+    //  
 }

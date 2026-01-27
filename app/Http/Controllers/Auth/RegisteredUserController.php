@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rechercheur;
+use App\Models\Recruteur;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -37,8 +39,8 @@ class RegisteredUserController extends Controller
             'role' => ['required', 'string', 'max:255'],
             'image' => ['required', 'string', 'max:300'],
         ]);
-
-        $user = User::create([
+        if($request->role === "RECRUTEUR"){
+            $user = Recruteur::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
@@ -46,6 +48,20 @@ class RegisteredUserController extends Controller
             'role' => $request->role , 
             'image' => $request->image 
         ]);
+
+        }else{
+            $user = Rechercheur::create([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role , 
+            'image' => $request->image 
+        ]);
+
+        }
+
+        
 
         event(new Registered($user));
 
