@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('relationships', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('sender_id')->constrained('users');
+            $table->foreignId('reciever_id')->constrained('users');
+            $table->enum('status',['ACCEPTED','REFUSED' , 'PENDING']);
+            $table->timestamps('date_creation')->useCurrent();
+            $table->timestamps('date_repond')->nullable();
         });
     }
 
