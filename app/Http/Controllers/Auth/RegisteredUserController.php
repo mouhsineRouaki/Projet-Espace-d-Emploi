@@ -39,8 +39,7 @@ class RegisteredUserController extends Controller
             'role' => ['required', 'string', 'max:255'],
             'image' => ['required', 'string', 'max:300'],
         ]);
-        if($request->role === "RECRUTEUR"){
-            $user = Recruteur::create([
+            $user = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
@@ -49,17 +48,6 @@ class RegisteredUserController extends Controller
             'image' => $request->image 
         ]);
 
-        }else{
-            $user = Rechercheur::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role , 
-            'image' => $request->image 
-        ]);
-
-        }
 
         
 
