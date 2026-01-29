@@ -1,8 +1,9 @@
 @props([
     'href' => '#',
+    'userId' => null,
     'nom' => 'Nom',
     'prenom' => 'Prénom',
-    'role' => 'RECHERCHEUR', 
+    'role' => 'RECHERCHEUR',
     'email' => 'email@exemple.com',
     'biographie' => 'Aucun bioghraphie pour le moment',
     'image' => null,
@@ -10,9 +11,16 @@
 
 @php
     $full = trim($prenom.' '.$nom);
-    $roleLabel = $role?->value === 'RECRUTEUR' ? 'Recruteur' : 'Chercheur';
 
-    $theme = $role?->value === 'RECRUTEUR' 
+    $roleValue = is_object($role)
+        ? ($role->value ?? $role->name ?? 'RECHERCHEUR')
+        : ($role ?? 'RECHERCHEUR');
+
+    $roleValue = strtoupper((string) $roleValue);
+
+    $roleLabel = $roleValue === 'RECRUTEUR' ? 'Recruteur' : 'Chercheur';
+
+    $theme = $roleValue === 'RECRUTEUR'
         ? [
             'main' => 'indigo',
             'grad' => 'from-violet-600 to-indigo-600',
@@ -28,12 +36,23 @@
             'btn'  => 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200'
           ];
 
-    $initials = mb_strtoupper(mb_substr($prenom, 0, 1) . mb_substr($nom, 0, 1));
+    $initials = mb_strtoupper(mb_substr($prenom ?: 'U', 0, 1) . mb_substr($nom ?: 'U', 0, 1));
     $shortBio = \Illuminate\Support\Str::limit($biographie ?? 'Aucune biographie disponible pour le moment.', 100);
+
+    // ✅ état ami
+    $auth = auth()->user();
+    $isMe = $auth && $userId && $auth->id == $userId;
+    $isFriend = $auth && $userId ? $auth->hasAmi($userId) : false;
+
+    // ✅ classes bouton (évite concat cassant dans {{ }})
+    $friendBtnClass = ($isFriend || $isMe)
+        ? 'border-slate-200 bg-slate-100 text-slate-300 cursor-not-allowed'
+        : "border-slate-200 text-slate-400 hover:text-{$theme['main']}-600 hover:border-{$theme['main']}-200 hover:bg-{$theme['main']}-50";
+
+    $friendBtnTitle = $isMe ? 'C’est vous' : ($isFriend ? 'Déjà ami' : 'Ajouter ami');
 @endphp
 
 <article class="group relative max-w-sm w-full bg-white rounded-[2rem] border border-slate-100 p-3 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2">
-    
     <div class="absolute inset-0 transition-opacity opacity-0 group-hover:opacity-100 duration-500">
         <div class="absolute -top-10 -left-10 w-32 h-32 {{ $theme['glow'] }} blur-3xl rounded-full"></div>
     </div>
@@ -42,7 +61,7 @@
         <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path>
         </svg>
-        
+
         <div class="absolute top-3 right-3">
             <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md text-white rounded-full border border-white/30">
                 {{ $roleLabel }}
@@ -72,8 +91,12 @@
             <h3 class="text-xl font-black text-slate-800 tracking-tight group-hover:text-{{ $theme['main'] }}-600 transition-colors">
                 {{ $full }}
             </h3>
+
             <div class="flex items-center gap-1.5 text-slate-500">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
                 <span class="text-xs font-medium">{{ $email }}</span>
             </div>
         </div>
@@ -83,30 +106,37 @@
         </p>
 
         <div class="mt-6 flex items-center gap-3">
-            <a href="{{ $href }}" 
+            <a href="{{ $href }}"
                class="flex-1 inline-flex justify-center items-center py-3 px-4 rounded-2xl {{ $theme['btn'] }} text-white text-sm font-bold shadow-lg transition-all active:scale-95">
                 Voir Profil
             </a>
+            <form method="post" action="{{route('relationships.ajouteami')}}">   
+            <input type="hidden" name="reciever_id" value="$userId"> 
             <button
-    type="button"
-    class="p-3 rounded-2xl border border-slate-200 text-slate-400
-           hover:text-{{ $theme['main'] }}-600 hover:border-{{ $theme['main'] }}-200 hover:bg-{{ $theme['main'] }}-50
-           transition-colors"
->
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <!-- user -->
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 19a6 6 0 00-12 0" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 11a4 4 0 100-8 4 4 0 000 8z" />
-        <!-- plus -->
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 8v6" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M22 11h-6" />
-    </svg>
-</button>
-
+                type="submit"
+                {{ ($isFriend || $isMe) ? 'disabled' : '' }}
+                class="p-3 rounded-2xl border transition-colors {{ $friendBtnClass }}"
+                title="{{ $friendBtnTitle }}"
+            >
+                @if($isFriend)
+                    <!-- user + check -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19a6 6 0 00-12 0" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11a4 4 0 100-8 4 4 0 000 8z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 13l2 2 4-4" />
+                    </svg>
+                @else
+                    <!-- user + plus -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19a6 6 0 00-12 0" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11a4 4 0 100-8 4 4 0 000 8z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 8v6" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 11h-6" />
+                    </svg>
+                @endif
+            </button>
+        </form>
+        </div>
     </div>
 
     <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-slate-50 rounded-full -z-10 group-hover:bg-{{ $theme['main'] }}-50 transition-colors"></div>
