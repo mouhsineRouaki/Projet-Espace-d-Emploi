@@ -1,6 +1,6 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,7 +10,8 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-Route::view('/search', 'users.search')->name('users.search');
+
+Route::get('/search',[UserController::class , 'searchPage'] )->name('users.search');
 Route::view('/users/{id}', 'users.show')->name('users.show');
 
 Route::view('/profile/manage', 'profile.manage')->name('profile.manage');
