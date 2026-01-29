@@ -110,8 +110,9 @@
                class="flex-1 inline-flex justify-center items-center py-3 px-4 rounded-2xl {{ $theme['btn'] }} text-white text-sm font-bold shadow-lg transition-all active:scale-95">
                 Voir Profil
             </a>
-            <form method="post" action="{{route('relationships.ajouteami')}}">   
-            <input type="hidden" name="reciever_id" value="$userId"> 
+            <form method="post" action="{{route('relationships.ajouteami')}}">  
+             @csrf 
+            <input type="hidden" name="reciever_id" value="{{$userId}}"> 
             <button
                 type="submit"
                 {{ ($isFriend || $isMe) ? 'disabled' : '' }}
