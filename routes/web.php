@@ -12,7 +12,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/search',[UserController::class , 'searchPage'] )->name('users.search');
-Route::view('/users/{id}', 'users.show')->name('users.show');
+Route::get('/users/{id}', [UserController::class , 'detailsPage'])->name('users.show');
 
 Route::view('/profile/manage', 'profile.manage')->name('profile.manage');
 
