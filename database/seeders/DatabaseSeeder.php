@@ -3,23 +3,41 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\UserRole;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $users = [
+            [
+                'nom' => 'Rouaki',
+                'prenom' => 'Mouhsine',
+                'email' => 'mouhsine@gmail.com',
+                'password' => Hash::make('password'),
+                'biographie' => 'Compte demo.',
+                'image' => 'https://intranet.youcode.ma/storage/users/profile/thumbnail/1694-1760996364.png',
+                'role' => UserRole::RECRUTEUR,
+                'date_creation' => now(),
+                'date_modification' => now(),
+            ],
+            [
+                'nom' => 'ayoub',
+                'prenom' => 'erak',
+                'email' => 'ayoub@gmail.com',
+                'password' => Hash::make('password'),
+                'biographie' => 'Laravel backend, APIs, PostgreSQL.',
+                'image' => 'https://intranet.youcode.ma/storage/users/profile/thumbnail/1751-1760996444.png',
+                'role' => UserRole::RECHERCHEUR,
+                'date_creation' => now(),
+                'date_modification' => now(),
+            ],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($users as $u) {
+            User::create($u);
+        }
     }
 }

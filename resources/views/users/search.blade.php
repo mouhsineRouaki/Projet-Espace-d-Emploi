@@ -87,12 +87,14 @@
                     @foreach($users as $u)
                         <div class="transform transition-all duration-300 hover:z-10">
                             <x-user-card
-                                :href="route('users.show', $u->id)"                    :nom="$u['nom']"
-                                :prenom="$u['prenom']"
-                                :role="$u['role']"
-                                :email="$u['email']"
-                                :biographie="$u['biographie']"
-                                :image="$u['image']"
+                                :href="route('users.show', $u->id)"
+                                :userId="$u->id"
+                                :nom="$u->nom"
+                                :prenom="$u->prenom"
+                                :role="$u->role"
+                                :email="$u->email"
+                                :biographie="$u->biographie"
+                                :image="$u->image"
                             />
                         </div>
                     @endforeach

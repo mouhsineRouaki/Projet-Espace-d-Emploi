@@ -169,32 +169,5 @@
                 </div>
             </div>
         </div>
-
-        <!-- Suggestions -->
-        <div class="rounded-2xl bg-white border border-slate-200/70 shadow-sm p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-base font-semibold text-slate-900">Suggestions</h3>
-                    <p class="mt-1 text-sm text-slate-500">Profils recommandés (statique).</p>
-                </div>
-                <a href="{{ url('/search') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
-                    Voir plus →
-                </a>
-            </div>
-
-            <div class="mt-5 grid gap-4 sm:grid-cols-2">
-                @foreach($suggestions as $s)
-                    <x-user-card
-                        :href="url('/users/' . $s['id'])"
-                        :nom="$s['nom']"
-                        :prenom="$s['prenom']"
-                        :role="$s['role']"
-                        :email="$s['email']"
-                        :biographie="$s['biographie']"
-                        :image="$s['image']"
-                    />
-                @endforeach
-            </div>
-        </div>
     </div>
 </x-app-layout>

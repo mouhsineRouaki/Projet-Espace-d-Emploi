@@ -7,6 +7,7 @@ use App\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\RelationShip;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,14 @@ class User extends Authenticatable
             'role' => UserRole::class,
         ];
     }
+    public function hasAmi($idAmi): bool
+{
+    return RelationShip::where('sender_id', auth()->id())
+            ->where('reciever_id', $idAmi)
+            ->exists()
+        || RelationShip::where('reciever_id', auth()->id())
+            ->where('sender_id', $idAmi)
+            ->exists();
+}
 
 }
