@@ -4,16 +4,15 @@
     'prenom' => 'Prénom',
     'role' => 'RECHERCHEUR', 
     'email' => 'email@exemple.com',
-    'biographie' => 'Bio…',
+    'biographie' => 'Aucun bioghraphie pour le moment',
     'image' => null,
 ])
 
 @php
     $full = trim($prenom.' '.$nom);
-    $roleLabel = $role === 'RECRUTEUR' ? 'Recruteur' : 'Chercheur';
+    $roleLabel = $role?->value === 'RECRUTEUR' ? 'Recruteur' : 'Chercheur';
 
-    // Configuration des thèmes (Couleurs cohérentes)
-    $theme = $role === 'RECRUTEUR' 
+    $theme = $role?->value === 'RECRUTEUR' 
         ? [
             'main' => 'indigo',
             'grad' => 'from-violet-600 to-indigo-600',
@@ -88,10 +87,26 @@
                class="flex-1 inline-flex justify-center items-center py-3 px-4 rounded-2xl {{ $theme['btn'] }} text-white text-sm font-bold shadow-lg transition-all active:scale-95">
                 Voir Profil
             </a>
-            <button class="p-3 rounded-2xl border border-slate-200 text-slate-400 hover:text-{{ $theme['main'] }}-600 hover:border-{{ $theme['main'] }}-200 hover:bg-{{ $theme['main'] }}-50 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-            </button>
-        </div>
+            <button
+    type="button"
+    class="p-3 rounded-2xl border border-slate-200 text-slate-400
+           hover:text-{{ $theme['main'] }}-600 hover:border-{{ $theme['main'] }}-200 hover:bg-{{ $theme['main'] }}-50
+           transition-colors"
+>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <!-- user -->
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 19a6 6 0 00-12 0" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 11a4 4 0 100-8 4 4 0 000 8z" />
+        <!-- plus -->
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 8v6" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M22 11h-6" />
+    </svg>
+</button>
+
     </div>
 
     <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-slate-50 rounded-full -z-10 group-hover:bg-{{ $theme['main'] }}-50 transition-colors"></div>
