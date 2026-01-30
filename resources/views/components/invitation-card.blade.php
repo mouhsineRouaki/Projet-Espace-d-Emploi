@@ -46,7 +46,6 @@
     $initials = mb_strtoupper(mb_substr($prenom ?: 'U', 0, 1) . mb_substr($nom ?: 'U', 0, 1));
     $shortBio = \Illuminate\Support\Str::limit($biographie ?? 'Aucune biographie disponible pour le moment.', 90);
 
-    // ✅ routes safe (ne plante pas si route non définie)
     $acceptUrl = \Illuminate\Support\Facades\Route::has('relationships.accept') ? route('relationships.accept') : '#';
     $refuseUrl = \Illuminate\Support\Facades\Route::has('relationships.refuse') ? route('relationships.refuse') : '#';
 @endphp
@@ -125,12 +124,12 @@
                     Déjà ami
                 </button>
             @else
-                {{-- ✅ Si sender => on cache accepter/refuser --}}
                 @if(!$isSender)
                     <div class="grid grid-cols-2 gap-3">
                         <form method="POST" action="{{ $acceptUrl }}">
                             @csrf
-                            <input type="hidden" name="user_id" value="{{ $userId }}">
+                            <input type="hidden" name="sender_id" value="{{ $userId }}">
+                            <input type="hidden" name="reciever_id" value="{{ auth()->id() }}">
                             <button type="submit"
                                     class="w-full inline-flex justify-center items-center py-3 px-4 rounded-2xl {{ $theme['ok'] }} text-white text-sm font-bold shadow-lg transition-all active:scale-95">
                                 Accepter
@@ -139,7 +138,8 @@
 
                         <form method="POST" action="{{ $refuseUrl }}">
                             @csrf
-                            <input type="hidden" name="user_id" value="{{ $userId }}">
+                            <input type="hidden" name="sender_id" value="{{ $userId }}">
+                            <input type="hidden" name="reciever_id" value="{{ auth()->id() }}">
                             <button type="submit"
                                     class="w-full inline-flex justify-center items-center py-3 px-4 rounded-2xl {{ $theme['no'] }} text-white text-sm font-bold shadow-lg transition-all active:scale-95">
                                 Refuser
