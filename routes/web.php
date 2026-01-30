@@ -26,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/relationships/ajouteami', [RelationShipController::class, 'AjouteAmi'])
         ->name('relationships.ajouteami');
+    Route::get('/profile/manage', [ProfileController::class, 'manage'])->name('profile.manage');
+    Route::patch('/profile/manage', [ProfileController::class, 'manageUpdate'])->name('profile.manage.update');
 });
 
 require __DIR__.'/auth.php';
