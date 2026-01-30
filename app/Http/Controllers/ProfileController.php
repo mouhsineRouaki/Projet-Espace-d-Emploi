@@ -57,4 +57,29 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+    public function manage(Request $request)
+    {
+        return view('profile.manage', [
+            'u' => $request->user(),
+        ]);
+    }
+
+    public function manageUpdate(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'nom' => ['required', 'string', 'max:50'],
+            'prenom' => ['required', 'string', 'max:50'],
+            'biographie' => ['nullable', 'string'],
+            'image' => ['nullable', 'url'],
+            'role' => ['required', 'in:RECRUTEUR,RECHERCHEUR'],
+        ]);
+
+        $user->update($data);
+
+        return redirect()
+            ->route('profile.manage')
+            ->with('status', 'Profil mis à jour ');
+    }
 }

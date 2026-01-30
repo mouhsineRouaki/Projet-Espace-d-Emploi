@@ -8,6 +8,6 @@ class RelationShip extends Model
 {
     protected $table = 'relationships';
     protected $fillable = [
-        'sender_id' , 'reciever_id'
+        'sender_id' , 'reciever_id' , 'status'
     ];
 }
