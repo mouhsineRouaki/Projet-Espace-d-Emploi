@@ -30,8 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/friends', [RelationShipController::class, 'friendsPage'])->name('friends.index');
 
 
-    Route::post('/relationships/accept', [RelationShipController::class, 'accept'])->name('relationships.accept');
-    Route::post('/relationships/refuse', [RelationShipController::class, 'refuse'])->name('relationships.refuse');
+    Route::post('/relationships/accept', [RelationShipController::class, 'accepter'])->name('relationships.accept');
+    Route::post('/relationships/refuse', [RelationShipController::class, 'refuser'])->name('relationships.refuse');
 });
 
 require __DIR__.'/auth.php';

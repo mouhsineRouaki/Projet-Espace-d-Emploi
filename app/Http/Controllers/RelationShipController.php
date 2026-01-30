@@ -79,14 +79,14 @@ class RelationShipController extends Controller
         $sender_id = $request->input('sender_id');
         $reciever_id  = $request->input('reciever_id');
 
-        RelationShip::where('sender_id' , $sender_id)->where('reciever_id' , $reciever_id)->update(['status'=> FriendShipStatu::ACCEPTED]);
+        RelationShip::where('sender_id' , $sender_id)->where('status', 'PENDING')->where('reciever_id' , $reciever_id)->update(['status'=> 'ACCEPTED']);
         return  redirect()->route('friends.index');
     }
     public function refuser(Request $request){
         $sender_id = $request->input('sender_id');
         $reciever_id  = $request->input('reciever_id');
 
-        RelationShip::where('sender_id' , $sender_id)->where('reciever_id' , $reciever_id)->update(['status'=> FriendShipStatu::REFUSED]);
+        RelationShip::where('sender_id' , $sender_id)->where('status', 'PENDING')->where('reciever_id' , $reciever_id)->update(['status'=> 'REFUSED']);
         return  redirect()->route('friends.index');
     }
 }
