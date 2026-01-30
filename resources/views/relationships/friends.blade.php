@@ -77,7 +77,7 @@
                             :image="$u['image']"
 
                             :dejaAmi="false"
-                            :isSender = "true"
+                            :isSender="true"
                         />
                     @empty
                         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-sm text-slate-500">
