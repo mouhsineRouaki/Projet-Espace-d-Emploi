@@ -3,65 +3,15 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-xl text-slate-900 leading-tight">Amis</h2>
-                <p class="text-sm text-slate-500">Demandes d’amitié + liste d’amis (statique).</p>
+                <p class="text-sm text-slate-500">Demandes d’amitié + liste d’amis.</p>
             </div>
-            <a href="{{ url('/search') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-700">
+
+            <a href="{{ route('users.search') }}"
+               class="text-sm font-semibold text-blue-600 hover:text-blue-700">
                 Trouver des profils →
             </a>
         </div>
     </x-slot>
-
-    @php
-        // ---------- Données statiques ----------
-        $received = [
-            [
-                'id' => 11,
-                'name' => 'Youssef Amrani',
-                'role' => 'RECHERCHEUR',
-                'headline' => 'Spécialité • Frontend',
-                'location' => 'Marrakech',
-                'bio' => 'Je fais des interfaces propres et rapides avec Tailwind.',
-                'tags' => ['Tailwind', 'Blade', 'UX'],
-                'state' => 'pending_received',
-            ],
-        ];
-
-        $sent = [
-            [
-                'id' => 12,
-                'name' => 'TechNova SARL',
-                'role' => 'RECRUTEUR',
-                'headline' => 'Entreprise • SaaS RH',
-                'location' => 'Casablanca',
-                'bio' => 'Nous recrutons des profils backend/fullstack.',
-                'tags' => ['Recrutement', 'SaaS', 'B2B'],
-                'state' => 'pending_sent',
-            ],
-        ];
-
-        $friends = [
-            [
-                'id' => 13,
-                'name' => 'Imane El Fassi',
-                'role' => 'RECHERCHEUR',
-                'headline' => 'Développeuse Laravel',
-                'location' => 'Rabat',
-                'bio' => 'Passionnée par les APIs et les bonnes pratiques.',
-                'tags' => ['Laravel', 'PHP', 'PostgreSQL'],
-                'state' => 'friends',
-            ],
-            [
-                'id' => 14,
-                'name' => 'Atlas Hiring',
-                'role' => 'RECRUTEUR',
-                'headline' => 'Agence • IT',
-                'location' => 'Casablanca',
-                'bio' => 'Nous connectons des talents IT avec des équipes ambitieuses.',
-                'tags' => ['IT', 'RH', 'Tech'],
-                'state' => 'friends',
-            ],
-        ];
-    @endphp
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -84,7 +34,6 @@
 
             <!-- Content -->
             <div class="grid gap-6 lg:grid-cols-3">
-                <!-- Received -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <h3 class="font-semibold text-slate-900">Demandes reçues</h3>
@@ -92,15 +41,17 @@
                     </div>
 
                     @forelse($received as $u)
-                        <x-user-card
-                            :href="url('/users/' . $u['id'])"
-                            :name="$u['name']"
+                        <x-invitation-card
+                            :href="route('users.show', $u['id'])"
+                            :userId="$u['id']"
+                            :nom="$u['nom']"
+                            :prenom="$u['prenom']"
                             :role="$u['role']"
-                            :headline="$u['headline']"
-                            :location="$u['location']"
-                            :bio="$u['bio']"
-                            :tags="$u['tags']"
-                            :state="$u['state']"
+                            :email="$u['email']"
+                            :biographie="$u['biographie']"
+                            :image="$u['image']"
+                            :dejaAmi="false"
+                            :isSender="false"
                         />
                     @empty
                         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-sm text-slate-500">
@@ -108,8 +59,6 @@
                         </div>
                     @endforelse
                 </div>
-
-                <!-- Sent -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <h3 class="font-semibold text-slate-900">Demandes envoyées</h3>
@@ -117,15 +66,18 @@
                     </div>
 
                     @forelse($sent as $u)
-                        <x-user-card
-                            :href="url('/users/' . $u['id'])"
-                            :name="$u['name']"
+                        <x-invitation-card
+                            :href="route('users.show', $u['id'])"
+                            :userId="$u['id']"
+                            :nom="$u['nom']"
+                            :prenom="$u['prenom']"
                             :role="$u['role']"
-                            :headline="$u['headline']"
-                            :location="$u['location']"
-                            :bio="$u['bio']"
-                            :tags="$u['tags']"
-                            :state="$u['state']"
+                            :email="$u['email']"
+                            :biographie="$u['biographie']"
+                            :image="$u['image']"
+
+                            :dejaAmi="false"
+                            :isSender = "true"
                         />
                     @empty
                         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-sm text-slate-500">
@@ -134,7 +86,6 @@
                     @endforelse
                 </div>
 
-                <!-- Friends -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <h3 class="font-semibold text-slate-900">Mes amis</h3>
@@ -142,15 +93,17 @@
                     </div>
 
                     @forelse($friends as $u)
-                        <x-user-card
-                            :href="url('/users/' . $u['id'])"
-                            :name="$u['name']"
+                        <x-invitation-card
+                            :href="route('users.show', $u['id'])"
+                            :userId="$u['id']"
+                            :nom="$u['nom']"
+                            :prenom="$u['prenom']"
                             :role="$u['role']"
-                            :headline="$u['headline']"
-                            :location="$u['location']"
-                            :bio="$u['bio']"
-                            :tags="$u['tags']"
-                            :state="$u['state']"
+                            :email="$u['email']"
+                            :biographie="$u['biographie']"
+                            :image="$u['image']"
+                            :dejaAmi="true"
+                            :isSender="false"
                         />
                     @empty
                         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-sm text-slate-500">
@@ -158,6 +111,7 @@
                         </div>
                     @endforelse
                 </div>
+
             </div>
 
         </div>
