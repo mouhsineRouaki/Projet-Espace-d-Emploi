@@ -15,7 +15,6 @@ Route::get('/dashboard', function () {
 Route::get('/search',[UserController::class , 'searchPage'] )->name('users.search');
 Route::get('/users/{id}', [UserController::class , 'detailsPage'])->name('users.show');
 
-Route::view('/profile/manage', 'profile.manage')->name('profile.manage');
 
 Route::view('/relationships', 'relationships.index')->name('relationships.index');
 Route::view('/notifications', 'notifications.index')->name('notifications.index');
@@ -28,6 +27,11 @@ Route::middleware('auth')->group(function () {
         ->name('relationships.ajouteami');
     Route::get('/profile/manage', [ProfileController::class, 'manage'])->name('profile.manage');
     Route::patch('/profile/manage', [ProfileController::class, 'manageUpdate'])->name('profile.manage.update');
+    Route::get('/friends', [RelationShipController::class, 'friendsPage'])->name('friends.index');
+
+
+    Route::post('/relationships/accept', [RelationShipController::class, 'accept'])->name('relationships.accept');
+    Route::post('/relationships/refuse', [RelationShipController::class, 'refuse'])->name('relationships.refuse');
 });
 
 require __DIR__.'/auth.php';
