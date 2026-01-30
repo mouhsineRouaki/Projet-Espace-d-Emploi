@@ -52,14 +52,14 @@ class User extends Authenticatable
             'role' => UserRole::class,
         ];
     }
-    public function hasAmi($idAmi): bool
-{
+    public function hasAmi($idAmi): bool{
     return RelationShip::where('sender_id', auth()->id())
             ->where('reciever_id', $idAmi)
             ->exists()
         || RelationShip::where('reciever_id', auth()->id())
             ->where('sender_id', $idAmi)
             ->exists();
-}
+    }
 
+    
 }
