@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->foreignId('sender_id')->constrained('users');
             $table->foreignId('reciever_id')->constrained('users');
-            $table->enum('status', ['ACCEPTED', 'REFUSED', 'PENDING']);
+            $table->enum('status', ['ACCEPTED', 'REFUSED', 'PENDING'])->default('PENDING');
             $table->timestamp('date_creation')->useCurrent();
             $table->timestamp('date_repond')->nullable();
         });
