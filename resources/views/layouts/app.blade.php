@@ -15,7 +15,11 @@
 </head>
 <body class="font-sans antialiased bg-[#f4f2ee] text-slate-900">
     <div class="min-h-screen">
-        <x-navigation :active="$active ?? 'dashboard' " />
+        @if (auth()->user()->role === 'RECRUTEUR')
+        <x-navigationRecruteur :active="$active ?? 'dashboard' " />
+        @else
+        <x-navigationRechercheur :active="$active ?? 'dashboard' " />
+        @endif
 
         @if (isset($header))
             <header class="py-5">
