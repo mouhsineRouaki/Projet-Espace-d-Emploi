@@ -23,7 +23,6 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'email',
-        'password',
         'role',
         'biographie' , 
         'image',
@@ -60,6 +59,40 @@ class User extends Authenticatable
             ->where('sender_id', $idAmi)
             ->exists();
     }
+    public function asTyped(): User
+    {
+        return match ($this->role) {
+            UserRole::RECRUTEUR => Recruteur::query()->findOrFail($this->id),
+            UserRole::RECHERCHEUR => Rechercheur::query()->findOrFail($this->id),
+            default => $this,
+        };
+    }
+    public function recruteur(){
+        return $this->hasOne(\App\Models\Recruteur::class, 'user_id', 'id');
+    }
+    public function rechercheur(){
+        return $this->hasOne(\App\Models\Rechercheur::class, 'user_id', 'id');
+    }
+    public function sentRelationships()
+    {
+        return $this->hasMany(\App\Models\Relationship::class, 'sender_id', 'id');
+    }
+
+    public function receivedRelationships()
+    {
+        return $this->hasMany(\App\Models\Relationship::class, 'reciever_id', 'id'); 
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(
+            \App\Models\User::class,
+            'relationships',
+            'sender_id',
+            'reciever_id'
+        )->wherePivot('status', 'ACCEPTED');
+    }
+
 
     
 }

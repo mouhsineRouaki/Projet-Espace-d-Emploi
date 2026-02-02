@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-class RelationShip extends Model
-{
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+class RelationShip extends Model{
+    use HasFactory;
     protected $table = 'relationships';
     protected $fillable = [
         'sender_id' , 'reciever_id' , 'status'
