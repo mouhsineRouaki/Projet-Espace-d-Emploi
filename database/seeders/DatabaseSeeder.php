@@ -2,42 +2,71 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\UserRole;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Recruteur;
+use App\Models\Rechercheur;
+use App\Models\Skill;
+use App\Models\JobOffer;
+use App\Models\Application;
+use App\Models\Formation;
+use App\Models\Experience;
+use App\Models\Relationship;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = [
-            [
-                'nom' => 'Rouaki',
-                'prenom' => 'Mouhsine',
-                'email' => 'mouhsine@gmail.com',
-                'password' => Hash::make('password'),
-                'biographie' => 'Compte demo.',
-                'image' => 'https://intranet.youcode.ma/storage/users/profile/thumbnail/1694-1760996364.png',
-                'role' => UserRole::RECRUTEUR,
-                'date_creation' => now(),
-                'date_modification' => now(),
-            ],
-            [
-                'nom' => 'ayoub',
-                'prenom' => 'erak',
-                'email' => 'ayoub@gmail.com',
-                'password' => Hash::make('password'),
-                'biographie' => 'Laravel backend, APIs, PostgreSQL.',
-                'image' => 'https://intranet.youcode.ma/storage/users/profile/thumbnail/1751-1760996444.png',
-                'role' => UserRole::RECHERCHEUR,
-                'date_creation' => now(),
-                'date_modification' => now(),
-            ],
-        ];
+       $skills = Skill::factory()->count(10)->create(); 
 
-        foreach ($users as $u) {
-            User::create($u);
-        }
+        $users = User::factory()->count(20)->create();
+
+        $recruteurs = $users->where('role', 'RECRUTEUR')->each(function ($user) {
+            Recruteur::factory()->create([
+                'user_id' => $user->id,
+            ]);
+        });
+
+        $rechercheurs = $users->where('role', 'RECHERCHEUR')->each(function ($user) use ($skills) {
+            $rechercheur = Rechercheur::factory()->create([
+                'user_id' => $user->id,
+            ]);
+
+            $rechercheur->skills()->attach(
+                $skills->random(rand(2, 5))->pluck('id')->toArray(),
+                ['niveau' => 'intermédiaire']
+            );
+
+            Formation::factory()->count(2)->create([
+                'rechercheur_user_id' => $user->id,
+            ]);
+
+            Experience::factory()->count(2)->create([
+                'rechercheur_user_id' => $user->id,
+            ]);
+        });
+
+        Recruteur::all()->each(function ($recruteur) {
+            JobOffer::factory()->count(3)->create([
+                'recruteur_user_id' => $recruteur->user_id,
+            ]);
+        });
+
+        $jobOffers = JobOffer::all();
+        Rechercheur::all()->each(function ($rechercheur) use ($jobOffers) {
+            Application::create([
+                'job_offer_id' => $jobOffers->random()->id,
+                'rechercheur_user_id' => $rechercheur->user_id,
+                'status' => 'PENDING',
+            ]);
+        });
+        $users->each(function ($user) use ($users) {
+            $friend = $users->where('id', '!=', $user->id)->random();
+
+            Relationship::firstOrCreate([
+                'sender_id' => $user->id,
+                'reciever_id' => $friend->id,
+            ]);
+        });
     }
 }
