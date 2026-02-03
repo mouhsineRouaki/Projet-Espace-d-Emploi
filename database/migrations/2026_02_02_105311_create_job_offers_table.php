@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('description');
             $table->string('image', 255);
             $table->string('ville', 80)->nullable();
+            $table->string('poste' , 200);
 
             $table->boolean('is_closed')->default(false);
             $table->timestamp('closed_at')->nullable();
