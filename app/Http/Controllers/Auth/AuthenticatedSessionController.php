@@ -30,8 +30,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->put('role', auth()->user()->role);
         $request->session()->put('nom', auth()->user()->nom);
         $user =  auth()->user();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        if($user->role === 'RECRUTEUR'){
+            return redirect()->route('dashboard.recruteur');
+        }else{
+            return redirect()->route('dashboard.rechercheur');
+        }
+        return $this->destroy($request);
     }
 
     /**
