@@ -42,7 +42,7 @@ class JobOfferController extends Controller
             'closed_at'         => null,
         ]);
 
-        return redirect()->route('offers.index')->with('success', 'Offre créée ✅');
+        return redirect()->route('offers.index')->with('success', 'Offre créée ');
     }
 
     public function close(Request $request, JobOffer $offer)
@@ -54,6 +54,25 @@ class JobOfferController extends Controller
             'closed_at' => now(),
         ]);
 
-        return redirect()->route('offers.index')->with('success', 'Offre clôturée ✅');
+        return redirect()->route('offers.index')->with('success', 'Offre clôturée');
     }
+    public function show(Request $request, JobOffer $offer)
+    {
+        $offer->load([
+            'recruteur',
+            'applications.rechercheur',
+        ]);
+
+        return view('offers.show', compact('offer'));
+    }
+    public function acceptedApplicants(JobOffer $offer)
+{
+    $offer->load(['applications' => function ($q) {
+        $q->where('status', 'ACCEPTED')
+          ->latest()
+          ->with('rechercheur');
+    }]);
+
+    return view('offers.accepted', compact('offer'));
+}
 }
