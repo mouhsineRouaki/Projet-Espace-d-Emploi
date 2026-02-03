@@ -23,6 +23,7 @@
                 </p>
             </div>
 
+
             <div x-data="{ open:false }" class="flex items-center gap-2">
                 <button @click="open = true"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-black hover:bg-indigo-600 transition">
@@ -32,111 +33,101 @@
                     Créer une offre
                 </button>
 
-<div x-data="{ open:false }" class="flex items-center gap-2">
-    <button @click="open = true"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-black hover:bg-indigo-600 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v14M5 12h14"/>
-        </svg>
-        Créer une offre
-    </button>
+                <template x-teleport="body">
+                    <div
+                        x-cloak
+                        x-show="open"
+                        x-transition.opacity
+                        @keydown.escape.window="open = false"
+                        class="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+                    >
+                        <!-- overlay -->
+                        <div class="absolute inset-0 bg-slate-900/60" @click="open=false"></div>
 
-    <!-- ✅ TELEPORT: modal au niveau du <body> -->
-    <template x-teleport="body">
-        <div
-            x-cloak
-            x-show="open"
-            x-transition.opacity
-            @keydown.escape.window="open = false"
-            class="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-        >
-            <!-- overlay -->
-            <div class="absolute inset-0 bg-slate-900/60" @click="open=false"></div>
+                        <!-- panel -->
+                        <div
+                            @click.stop
+                            x-transition
+                            class="relative z-10 w-full max-w-2xl rounded-[2rem] bg-white shadow-2xl border border-slate-200 overflow-hidden"
+                        >
+                            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-lg font-black text-slate-900">Nouvelle offre</h3>
+                                    <p class="text-sm text-slate-500">Remplis les champs obligatoires (*)</p>
+                                </div>
+                                <button @click="open=false" class="p-2 rounded-xl hover:bg-slate-100 text-slate-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
 
-            <!-- panel -->
-            <div
-                @click.stop
-                x-transition
-                class="relative z-10 w-full max-w-2xl rounded-[2rem] bg-white shadow-2xl border border-slate-200 overflow-hidden"
-            >
-                <div class="p-6 border-b border-slate-200 flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-black text-slate-900">Nouvelle offre</h3>
-                        <p class="text-sm text-slate-500">Remplis les champs obligatoires (*)</p>
+                            <form method="POST" action="{{ route('offers.store') }}" class="p-6 space-y-4">
+                                @csrf
+
+                                @if ($errors->any())
+                                    <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                                        <ul class="list-disc ms-5">
+                                            @foreach ($errors->all() as $e)
+                                                <li>{{ $e }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700">Type contrat *</label>
+                                        <select name="type_contrat"
+                                                class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option value="CDI">CDI</option>
+                                            <option value="CDD">CDD</option>
+                                            <option value="Full-time">Full-time</option>
+                                            <option value="Stage">Stage</option>
+                                            <option value="Freelance">Freelance</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700">Ville</label>
+                                        <input name="ville" type="text" placeholder="Casablanca, Rabat…"
+                                               class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                    </div>
+
+                                    <div class="sm:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Titre *</label>
+                                        <input name="titre" type="text" placeholder="Ex: Développeur Fullstack"
+                                               class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                    </div>
+
+                                    <div class="sm:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Description *</label>
+                                        <textarea name="description" rows="5" placeholder="Détail du poste..."
+                                                  class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                    </div>
+
+                                    <div class="sm:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Image (URL) *</label>
+                                        <input name="image" type="url" placeholder="https://..."
+                                               class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-end gap-2 pt-2">
+                                    <button type="button" @click="open=false"
+                                            class="rounded-2xl border border-slate-200 px-5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-50">
+                                        Annuler
+                                    </button>
+                                    <button type="submit"
+                                            class="rounded-2xl bg-indigo-600 px-5 py-2.5 text-sm font-black text-white hover:bg-indigo-700">
+                                        Créer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <button @click="open=false" class="p-2 rounded-xl hover:bg-slate-100 text-slate-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <form method="POST" action="{{ route('offers.store') }}" class="p-6 space-y-4">
-                    @csrf
-
-                    @if ($errors->any())
-                        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
-                            <ul class="list-disc ms-5">
-                                @foreach ($errors->all() as $e)
-                                    <li>{{ $e }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-sm font-bold text-slate-700">Type contrat *</label>
-                            <select name="type_contrat"
-                                    class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="CDI">CDI</option>
-                                <option value="CDD">CDD</option>
-                                <option value="Full-time">Full-time</option>
-                                <option value="Stage">Stage</option>
-                                <option value="Freelance">Freelance</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="text-sm font-bold text-slate-700">Ville</label>
-                            <input name="ville" type="text" placeholder="Casablanca, Rabat…"
-                                   class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
-                        </div>
-
-                        <div class="sm:col-span-2">
-                            <label class="text-sm font-bold text-slate-700">Titre *</label>
-                            <input name="titre" type="text" placeholder="Ex: Développeur Fullstack"
-                                   class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
-                        </div>
-
-                        <div class="sm:col-span-2">
-                            <label class="text-sm font-bold text-slate-700">Description *</label>
-                            <textarea name="description" rows="5" placeholder="Détail du poste..."
-                                      class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                        </div>
-
-                        <div class="sm:col-span-2">
-                            <label class="text-sm font-bold text-slate-700">Image (URL) *</label>
-                            <input name="image" type="url" placeholder="https://..."
-                                   class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-2 pt-2">
-                        <button type="button" @click="open=false"
-                                class="rounded-2xl border border-slate-200 px-5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-50">
-                            Annuler
-                        </button>
-                        <button type="submit"
-                                class="rounded-2xl bg-indigo-600 px-5 py-2.5 text-sm font-black text-white hover:bg-indigo-700">
-                            Créer
-                        </button>
-                    </div>
-                </form>
+                </template>
             </div>
-        </div>
-    </template>
-</div>
 
 <!-- /MODAL -->
 

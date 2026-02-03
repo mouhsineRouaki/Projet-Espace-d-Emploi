@@ -47,9 +47,11 @@ class RegisteredUserController extends Controller
             'role' => $request->role , 
             'image' => $request->image 
         ]);
-
-
-        
+            if($user->role === "RECRUTEUR"){
+                $user->assigneRole('recruteur');
+            }else{
+                $user->assigneRole('rechercheur');
+            }
 
         event(new Registered($user));
 

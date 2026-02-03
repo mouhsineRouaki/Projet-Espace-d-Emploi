@@ -92,6 +92,9 @@ class User extends Authenticatable
             'reciever_id'
         )->wherePivot('status', 'ACCEPTED');
     }
+    public function notifications(){
+        return $this->hasMany(\App\Models\Notifications ,'user_id' , 'id');
+    }
 
 
     
