@@ -128,11 +128,6 @@
                     </div>
                 </template>
             </div>
-
-<!-- /MODAL -->
-
-                <!-- /MODAL -->
-            </div>
         </div>
     </x-slot>
 
