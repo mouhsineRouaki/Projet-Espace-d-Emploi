@@ -3,6 +3,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RelationShipController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JobOfferController;
+use App\Http\Controllers\ApplicationsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,6 +31,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/offers', [JobOfferController::class, 'index'])->name('offers.index');
     Route::post('/offers', [JobOfferController::class, 'store'])->name('offers.store');
     Route::post('/offers/{offer}/close', [JobOfferController::class, 'close'])->name('offers.close');
+    Route::get('/offers/{offer}', [JobOfferController::class, 'show'])->name('offers.show');
+
+    Route::patch('/applications/{application}/accept', [ApplicationsController::class, 'accept'])
+        ->name('applications.accept');
+    Route::get('/offers/{offer}/accepted', [JobOfferController::class, 'acceptedApplicants'])
+    ->name('offers.accepted');
+
 });
 
 require __DIR__.'/auth.php';
