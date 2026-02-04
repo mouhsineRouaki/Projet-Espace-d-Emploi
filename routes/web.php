@@ -12,7 +12,7 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'role:recruteur'])->group(function(){
-    
+
 });
 
 Route::middleware(['auth', 'role:rechercheur'])->group(function(){
@@ -20,7 +20,7 @@ Route::middleware(['auth', 'role:rechercheur'])->group(function(){
 });
 
 Route::middleware(['auth', 'permission:offer.create'])->group(function(){
-    
+
 });
 
 
@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
     Route::post('/relationships/ajouteami', [RelationShipController::class, 'AjouteAmi'])->name('relationships.ajouteami');
     Route::get('/profile/manage', [ProfileController::class, 'manage'])->name('profile.manage');
     Route::patch('/profile/manage', [ProfileController::class, 'manageUpdate'])->name('profile.manage.update');
@@ -45,13 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/offers', [JobOfferController::class, 'index'])->name('offers.index');
     Route::post('/offers', [JobOfferController::class, 'store'])->name('offers.store');
     Route::post('/offers/{offer}/close', [JobOfferController::class, 'close'])->name('offers.close');
-    Route::get('/offers/{offer}', [JobOfferController::class, 'show'])->name('offers.show');
+    Route::get('/offers/{offer}', [JobOfferController::class, 'show'])->name('offers.recruteur.show');
 
     Route::patch('/applications/{application}/accept', [ApplicationsController::class, 'accept'])
         ->name('applications.accept');
     Route::get('/offers/{offer}/accepted', [JobOfferController::class, 'acceptedApplicants'])
     ->name('offers.accepted');
-
 });
 
 require __DIR__.'/auth.php';
