@@ -57,11 +57,15 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-    public function manage(Request $request)
-    {
-        return view('profile.manage', [
-            'u' => $request->user(),
-        ]);
+    public function manage(Request $request){
+        $role = auth()->user()->role->value ;
+        if($role === 'RECRUTEUR'){
+            return view('profile.manage', ['u' => $request->user(),]);
+        }else{
+            return view('profile.rechercheur.manage', ['u' => $request->user(),]);
+        }
+
+        
     }
 
     public function manageUpdate(Request $request)
