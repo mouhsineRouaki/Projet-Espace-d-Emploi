@@ -54,7 +54,7 @@
 
         <div class="mt-5 flex items-center gap-2">
             <!-- (optionnel) bouton détail si tu ajoutes offers.show plus tard -->
-            <form method="GET" action="{{ route('offers.show', $offer) }}">
+            <form method="GET" action="{{ route('offers.recruteur.show', $offer) }}">
                 @csrf
                 <button type="submit"
                         class="flex-1 rounded-2xl border border-slate-200 px-4 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-50">
