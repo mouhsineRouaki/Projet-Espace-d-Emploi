@@ -62,7 +62,7 @@ class ProfileController extends Controller
         if($role === 'RECRUTEUR'){
             return view('profile.manage', ['u' => $request->user(),]);
         }else{
-            return view('profile.rechercheur.manage', ['u' => $request->user(),]);
+            return view('rechercheur.profile.edi', ['u' => $request->user(),]);
         }
 
         

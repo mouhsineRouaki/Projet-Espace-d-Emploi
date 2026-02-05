@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\JobOffer;
 use App\Models\Application;
+use App\Services\McpApiService;
 
 class Offers extends Component
 {
@@ -12,15 +13,13 @@ class Offers extends Component
     public string $type = '';
     public string $ville = '';
     public bool $openOnly = true;
+    public array $mcp = [];
 
     public int $perPage = 6;
-
-    // Modal postuler
     public bool $showApplyModal = false;
     public ?JobOffer $selectedOffer = null;
     public string $message = '';
 
-    // Liste des offres déjà postulées par user connecté
     public array $appliedOfferIds = [];
 
     public function mount()
@@ -110,7 +109,7 @@ class Offers extends Component
         $this->refreshAppliedIds();
         $this->closeApply();
 
-        session()->flash('success', 'Candidature envoyée ✅');
+        session()->flash('success', 'Candidature envoyée');
     }
 
     public function render()
@@ -135,5 +134,26 @@ class Offers extends Component
         return view('livewire.offers-rechercheurs', [
             'offers' => $offers,
         ]);
+    }
+    
+    public function mcpForOffer(int $offerId): array{
+        $meId = auth()->id();
+
+        $rechercheur = Rechercheur::with('user')->where('user_id', $meId)->firstOrFail();
+        $offer = JobOffer::findOrFail($offerId);
+
+        return app(McpApiService::class)->score($offer, $rechercheur);
+    }
+
+    public function getMcp(int $offerId): array{
+        if (isset($this->mcp[$offerId])) return $this->mcp[$offerId];
+
+        $rechercheur = \App\Models\Rechercheur::with('user')
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $offer = \App\Models\JobOffer::findOrFail($offerId);
+
+        return $this->mcp[$offerId] = app(\App\Services\McpApiService::class)->score($offer, $rechercheur);
     }
 }
