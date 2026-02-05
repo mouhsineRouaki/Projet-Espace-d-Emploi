@@ -10,9 +10,10 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
+
 <body class="font-sans antialiased bg-[#f4f2ee] text-slate-900">
     <div class="min-h-screen">
         <x-navigation :active="$active ?? 'dashboard' " />
@@ -39,5 +40,8 @@
             </div>
         </footer>
     </div>
+
+    {{-- ✅ obligatoire pour Livewire --}}
+    @livewireScripts
 </body>
 </html>
