@@ -54,7 +54,7 @@ class JobOfferController extends Controller
             'closed_at' => now(),
         ]);
 
-        return redirect()->route('offers.recruteur.index')->with('success', 'Offre clôturée');
+        return redirect()->route('offers.index')->with('success', 'Offre clôturée');
     }
     public function show(Request $request, JobOffer $offer)
     {
