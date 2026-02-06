@@ -51,7 +51,6 @@ class RechercheurProfileController extends Controller
 
         $data = $request->validate($rules);
 
-        // update User
         $u->update([
             'nom' => $data['nom'],
             'prenom' => $data['prenom'],
@@ -59,8 +58,6 @@ class RechercheurProfileController extends Controller
             'image' => $data['image'] ?? null,
             'role' => $data['role'],
         ]);
-
-        // update Rechercheur si rôle = RECHERCHEUR
         if ($data['role'] === 'RECHERCHEUR') {
             Rechercheur::updateOrCreate(
                 ['user_id' => $u->id],
@@ -73,10 +70,9 @@ class RechercheurProfileController extends Controller
             );
         }
 
-        return back()->with('status', 'Profil mis à jour ✅');
+        return back()->with('status', 'Profil mis à jour ');
     }
 
-    // ------------------- FORMATIONS -------------------
     public function storeFormation(Request $request)
     {
         $u = $request->user();
@@ -94,7 +90,7 @@ class RechercheurProfileController extends Controller
 
         $rechercheur->formations()->create($data);
 
-        return back()->with('status', 'Formation ajoutée ✅');
+        return back()->with('status', 'Formation ajoutée');
     }
 
     public function updateFormation(Request $request, Formation $formation)
@@ -110,7 +106,7 @@ class RechercheurProfileController extends Controller
 
         $formation->update($data);
 
-        return back()->with('status', 'Formation modifiée ✅');
+        return back()->with('status', 'Formation modifiée ');
     }
 
     public function destroyFormation(Request $request, Formation $formation)
@@ -118,10 +114,9 @@ class RechercheurProfileController extends Controller
         abort_unless($formation->rechercheur_user_id === $request->user()->id, 403);
         $formation->delete();
 
-        return back()->with('status', 'Formation supprimée ✅');
+        return back()->with('status', 'Formation supprimée ');
     }
 
-    // ------------------- EXPERIENCES -------------------
     public function storeExperience(Request $request)
     {
         $u = $request->user();
@@ -144,7 +139,7 @@ class RechercheurProfileController extends Controller
 
         $rechercheur->experiences()->create($data);
 
-        return back()->with('status', 'Expérience ajoutée ✅');
+        return back()->with('status', 'Expérience ajoutée');
     }
 
     public function updateExperience(Request $request, Experience $experience)
@@ -165,7 +160,7 @@ class RechercheurProfileController extends Controller
 
         $experience->update($data);
 
-        return back()->with('status', 'Expérience modifiée ✅');
+        return back()->with('status', 'Expérience modifiée ');
     }
 
     public function destroyExperience(Request $request, Experience $experience)
@@ -196,7 +191,7 @@ class RechercheurProfileController extends Controller
             $skill->id => ['niveau' => $data['niveau'] ?? null],
         ]);
 
-        return back()->with('status', 'Compétence ajoutée ✅');
+        return back()->with('status', 'Compétence ajoutée');
     }
 
     public function updateSkill(Request $request, Skill $skill)
@@ -212,7 +207,7 @@ class RechercheurProfileController extends Controller
             'niveau' => $data['niveau'] ?? null,
         ]);
 
-        return back()->with('status', 'Niveau compétence modifié ✅');
+        return back()->with('status', 'Niveau compétence modifié');
     }
 
     public function detachSkill(Request $request, Skill $skill)
@@ -222,6 +217,6 @@ class RechercheurProfileController extends Controller
 
         $rechercheur->skills()->detach($skill->id);
 
-        return back()->with('status', 'Compétence supprimée ✅');
+        return back()->with('status', 'Compétence supprimée');
     }
 }
