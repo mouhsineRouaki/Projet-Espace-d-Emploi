@@ -26,7 +26,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('offers.show', $offer->id) }}"
+                <a href="{{ route('offers.recruteur.show', $offer->id) }}"
                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm font-black text-slate-700 hover:bg-slate-50">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M15 19l-7-7 7-7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -51,7 +51,7 @@
                         </p>
                     </div>
 
-                    <a href="{{ route('offers.show', $offer->id) }}"
+                    <a href="{{ route('offers.recruteur.show', $offer->id) }}"
                        class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
                         Voir toutes les candidatures →
                     </a>
