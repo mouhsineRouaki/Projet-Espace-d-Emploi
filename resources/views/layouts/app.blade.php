@@ -20,7 +20,7 @@
 
         @if (isset($header))
             <header class="py-5">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="sm:px-6 lg:px-8">
                     <div class="rounded-2xl bg-white/80 backdrop-blur border border-slate-200/70 px-5 py-4 shadow-sm">
                         {{ $header }}
                     </div>
@@ -29,7 +29,7 @@
         @endif
 
         <main class="pb-10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class=" sm:px-6 lg:px-8">
                 {{ $slot }}
             </div>
         </main>
@@ -40,8 +40,6 @@
             </div>
         </footer>
     </div>
-
-    {{-- ✅ obligatoire pour Livewire --}}
     @livewireScripts
 </body>
 </html>
