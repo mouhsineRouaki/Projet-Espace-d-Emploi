@@ -1,4 +1,30 @@
 <x-app-layout>
+    @php
+        $full = trim(($user->prenom ?? '').' '.($user->nom ?? ''));
+        $role = $user->role;
+        $roleLabel = $role == 'RECRUTEUR' ? 'Recruteur' : 'Chercheur';
+
+        $theme = $role === 'RECRUTEUR'
+            ? [
+                'main' => 'indigo',
+                'grad' => 'from-violet-600 to-indigo-600',
+                'soft' => 'bg-violet-50 text-violet-700 ring-violet-200',
+                'glow' => 'bg-violet-400/20',
+                'btn'  => 'bg-violet-600 hover:bg-violet-700 shadow-violet-200'
+              ]
+            : [
+                'main' => 'emerald',
+                'grad' => 'from-teal-500 to-emerald-500',
+                'soft' => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+                'glow' => 'bg-emerald-400/20',
+                'btn'  => 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200'
+              ];
+
+        $initials = mb_strtoupper(mb_substr($user->prenom ?? 'U', 0, 1) . mb_substr($user->nom ?? 'U', 0, 1));
+        $bio = $user->biographie ?: 'Aucune biographie disponible pour le moment.';
+        $created = optional($user->created_at)->format('d/m/Y') ?? '—';
+    @endphp
+
     <!-- Background glow -->
     <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full {{ $theme['glow'] }} blur-[120px]"></div>
@@ -79,7 +105,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 5v14M5 12h14" stroke-width="2.5" stroke-linecap="round"/>
                             </svg>
-                            Ajouter 
+                            Ajouter au réseau
                         </a>
                     </div>
 
@@ -127,7 +153,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" stroke-width="2.5" stroke-linecap="round"/>
                         </svg>
-                        Ajouter
+                        Ajouter au réseau
                     </a>
                 </div>
 

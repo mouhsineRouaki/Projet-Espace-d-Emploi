@@ -83,7 +83,7 @@
 
             <!-- Cards container -->
             <div class="px-5 sm:px-6 pb-6">
-                <div class="grid gap-6 sm:grid-cols-2">
+                <div class="grid gap-6 sm:grid-cols-3">
                     @foreach($users as $u)
                         <div class="transform transition-all duration-300 hover:z-10">
                             <x-user-card

@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}', [UserController::class , 'detailsPage'])->name('users.show');
     Route::view('/relationships', 'relationships.index')->name('relationships.index');
     Route::view('/notifications', 'notifications.index')->name('notifications.index');
-    Route::get('/offers', [JobOfferController::class, 'index'])->name('offers.index');
+    Route::get('recruteur/offers', [JobOfferController::class, 'index'])->name('offers.index');
     Route::post('/offers', [JobOfferController::class, 'store'])->name('offers.store');
     Route::post('/offers/{offer}/close', [JobOfferController::class, 'close'])->name('offers.close');
     Route::get('/offers/{offer}', [JobOfferController::class, 'show'])->name('offers.recruteur.show');

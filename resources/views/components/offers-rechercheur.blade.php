@@ -8,6 +8,7 @@
     $pct = $score['percentage'];
     $possible = $score['possiblePostule'];
     $canApply = !$applied && !$offer->is_closed && $possible && $pct > 0;
+
     $recruteurUser = $offer->recruteur?->user;
     $recruteurName = trim(($recruteurUser->prenom ?? '').' '.($recruteurUser->nom ?? ($recruteurUser->name ?? 'Recruteur')));
     $recruteurImg = $recruteurUser->image ?? 'https://i.pravatar.cc/150?img=3';
@@ -94,7 +95,7 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
         </svg>
-        Postuler
+        Postuler ({{ $pct }}%)
     @endif
 </button>
     </div>
